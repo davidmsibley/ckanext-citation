@@ -1,6 +1,10 @@
 /* Cite a dataset in a specific citation style
 */
 this.ckan.module('show-citation', function (jQuery) {
+  var getUrl = function(path) {
+    var siteRoot = jQuery('body').data('siteRoot') || '';
+    return siteRoot + path;
+  }
   return {
     options: {
       url: window.location.href
@@ -21,7 +25,7 @@ this.ckan.module('show-citation', function (jQuery) {
 
       this.setupCitation();
 
-      jQuery.getJSON('/ckanext/citation/csl/csl_styles.json').done(
+      jQuery.getJSON(getUrl('/ckanext/citation/csl/csl_styles.json')).done(
         function(data) {
           self.setupSelection(data);
         })
@@ -101,8 +105,8 @@ this.ckan.module('show-citation', function (jQuery) {
 
       self.clipboard.hide();
       jQuery.when(
-        jQuery.get(style.href, function(){}, 'text'),
-        jQuery.get('/ckanext/citation/csl/locales/locales-en-US.xml', function(){}, 'text'))
+        jQuery.get(getUrl(style.href), function(){}, 'text'),
+        jQuery.get(getUrl('/ckanext/citation/csl/locales/locales-en-US.xml'), function(){}, 'text'))
       .done(
         function (a1, a2) {
           var citeprocSys = {
